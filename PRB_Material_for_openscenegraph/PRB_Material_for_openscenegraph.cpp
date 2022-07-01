@@ -50,7 +50,7 @@ public:
 	void notify(osg::NotifySeverity severity, const char* message)
 	{
 		//if (severity == osg::NotifySeverity::ALWAYS)
-		std::cout << message << std::endl;
+		//std::cout << message << std::endl;
 	}
 
 protected:
@@ -186,10 +186,10 @@ void CreateShaders(osg::Node* node, osg::MatrixTransform* rootTransForm, osg::Ca
 		osg::Vec3(10.0f, -10.0f, 10.0f),
 	};
 	osg::Vec3 lightColors[] = {
-		osg::Vec3(300.0f, 300.0f, 300.0f),
-		osg::Vec3(300.0f, 300.0f, 300.0f),
-		osg::Vec3(300.0f, 300.0f, 300.0f),
-		osg::Vec3(300.0f, 300.0f, 300.0f)
+		osg::Vec3(1000.0f, 1000.0f, 1000.0f),
+		osg::Vec3(1000.0f, 0.0f, 0.0f),
+		osg::Vec3(0.0f, 0.0f, 1000.0f),
+		osg::Vec3(0.0f, 1000.0f, 0.0f)
 	};
 
 	osg::ref_ptr<osg::Uniform> viewPos = new osg::Uniform(
@@ -221,6 +221,7 @@ void CreateMultipleSpheres(osg::MatrixTransform* rootTrans, osg::Camera* cam)
 	int nrColumns = 7;
 	float spacing = 2.5;
 	osg::Matrix model = osg::Matrix::identity();
+	int index = 0;
 	for (int row = 0; row < nrRows; ++row)
 	{
 		float metallic = (float)row / (float)nrRows;
@@ -235,11 +236,14 @@ void CreateMultipleSpheres(osg::MatrixTransform* rootTrans, osg::Camera* cam)
 				0.0f));
 
 			auto sphere = CreateSphere();
+			roughness = index * 0.021f;
+			std::cout << "roughness: " << roughness << std::endl;
 			CreateShaders(sphere, rootTrans, cam, metallic, roughness);
 			osg::ref_ptr<osg::MatrixTransform> sphereTrans = new osg::MatrixTransform;
 			sphereTrans->addChild(sphere);
 			sphereTrans->setMatrix(mat);
 			rootTrans->addChild(sphereTrans);
+			++index;
 		}
 	}
 
